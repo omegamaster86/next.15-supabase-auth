@@ -17,7 +17,7 @@ export async function GET(request: Request) {
       provider: "google",
       options: {
         // 認証完了後、Google から戻ってくる先の URL を指定
-        redirectTo: `http://localhost:3000/app/auth/callback?redirect_to=/app/notes`,
+        redirectTo: `http://localhost:3000/app/auth/callback`,
       },
     });
     if (error) {
