@@ -9,6 +9,22 @@ export async function GET(request: Request) {
   const code = requestUrl.searchParams.get("code");
   const origin = requestUrl.origin;
   const redirectTo = requestUrl.searchParams.get("redirect_to")?.toString();
+  const provider = requestUrl.searchParams.get("provider");
+
+  if (provider === "google") {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        // 認証完了後、Google から戻ってくる先の URL を指定
+        redirectTo: `http://localhost:3000/app/auth/callback?redirect_to=/app/notes`,
+      },
+    });
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
+    return NextResponse.redirect(data.url);
+  }
 
   if (code) {
     const supabase = await createClient();
